@@ -1,55 +1,44 @@
-def deposito(valor, conta, extrato_list):
-    extrato_list.append(f"Depósito de R$ {valor:.2f}")
-    return conta + valor
-
-
-def saque(valor, conta, extrato_list):
-    if valor > 500 or valor > conta:
-        print("O valor inserido é invalido")
+usuario = {}
+contas = []
+numero_total_contas = 0
+def cadastrar_usuario():
+    global usuario
+    nome = input("Nome: ")
+    data = input("Data de nascimento: ")
+    cpf = int(input("CPF: "))
+    if cpf in usuario:
+        "CPF já cadastrado!"
+        return
     else:
-        extrato_list.append(f"Saque de R$ {valor:.2f}")
-        return conta - valor
+        logradouro = input("Logradouro: ")
+        numero_casa = input("Numero da casa: ")
+        bairro = input("Bairro: ")
+        cidade = input("Cidade: ")
+        estado = input("Estado: ")
+        usuario.update({cpf:{"nome":nome, "data_nascimento": data, "endereco":{"logradouro": logradouro,"numero": numero_casa, "bairro": bairro, "cidade": cidade, "estado": estado}}})
+    print(usuario)
 
-def extrato():
-    if extrato_list:
-        print("\n".join(extrato_list))
-        print(f"\nSaldo atual: R$ {saldo:.2f}")
+def conta_corrente():
+    global usuario
+    global contas
+    global numero_total_contas
+    print(usuario)
+    numero_da_conta = numero_total_contas + 1
+    agencia = ("0001",)
+    cpf = input("Qual seu CPF?\n")
+    if cpf in usuario.keys():
+        contas.append([numero_da_conta, agencia, cpf])
+        print(contas)
     else:
-        print("Não foram realizadas movimentações")
+        print("CPF não cadastrado!")
 
+def trocar_de_usuario():
+    cpf = input("CPF: ")
 
-def verifica_valor(valor):
-    if(valor <= 0):
-        print("Valor inválido, insira um valor maior que 0!")
-        return False
-    else:
-        return True
-    
+#def saque(cpf):
 
-numero_de_saque = 0
-saldo = 0
-extrato_list = []
+cadastrar_usuario()
+conta_corrente()
 
-while True:
-    opcao = input("\n_____________MENU____________\n0 - sair\n1 - deposito \n2 - saque\n3 - extrato\n")
-    if opcao == '0':
-        break
-    elif opcao == '1':
-        valor = float(input("\nValor a depositar: "))
-        if verifica_valor(valor):
-           saldo = deposito(valor, saldo, extrato_list)
-           
-    elif opcao == '2':
-        valor = float(input("\nValor a sacar: "))
-        if numero_de_saque < 3:
-            if verifica_valor(valor):
-                saldo = saque(valor, saldo, extrato_list)
-                numero_de_saque += 1
-        else:
-            print("Limite de saques diários atingido!--")
-
-    elif opcao == '3':
-        extrato()
-    
-    else:
-        print("Opção inválida, selecione outra opção!")
+print("__________________MENU________________")
+print("1-Cadastrar usuario\n2-criar conta\n")
