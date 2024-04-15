@@ -62,4 +62,6 @@ def trocar_de_conta(cpf, imprime_contas):
 
 # Testando a função trocar_de_conta com os dados estáticos
 cpf_teste = "12345678900"
+print(len(contas))
 trocar_de_conta(cpf_teste, imprime_contas_usuario)
+
