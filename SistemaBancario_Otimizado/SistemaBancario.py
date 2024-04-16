@@ -56,18 +56,27 @@ def conta_corrente(cpf, usuario):
     print(usuario[cpf]["conta"])
     return numero_total_contas
 
-def imprime_contas_usuario(cpf, usuario):
-    print(usuario[cpf]["conta"])
+def imprime_contas_usuario(cpf, usuario):  
+    print(type(usuario)) 
+    contas = []
+    for usuario_id, dados_usuario in usuario.items():
+        if usuario_id == cpf:
+            for conta in dados_usuario['conta']:
+                contas.append(conta)
+    for conta in contas:
+        print(conta)
+
 
 def trocar_de_conta(cpf, usuario):
+    print(type(usuario))
     print("Escolha o numero da conta para qual deseja trocar")
     imprime_contas_usuario(cpf, usuario)
     escolha = input("0 - Cancelar a operação\n")
     
     if escolha != '0':
-         for conta in usuario[cpf].get("conta", []):
-            print(conta)
-            return escolha
+        for x in usuario[cpf]['conta']:
+            print(x)
+        return escolha
     elif escolha == '0':
         print("Operação cancelada!")
     else:
@@ -104,41 +113,42 @@ def saque(valor):
 def imprime_extrato():
     print(contas[pos_cpf_vetor][pos_conta_vetor]["extrato"])
 
-def menu(usuario, cpf, conta):
-    while True:
-        print("\n__________________MENU________________")
-        print("0-Sair\n1-Cadastrar novo usuario")
-        if usuario:
-            print("2-Criar conta corrente")
-        if len(usuario) >= 2:
-            print("3-Trocar de usuario")
-        if usuario.get(cpf) and usuario[cpf].get("conta"):
-            print("4-Trocar de conta\n5-Depositar\n6-Sacar\n7-Extrato")
-        menu = input("Escolha uma opção\n")
-        if menu == '0':
-            break
-        elif menu == '1':
-            cpf = cadastrar_usuario(usuario)
-        elif menu == '2':
-            conta = conta_corrente(cpf, usuario)
-        elif menu == '3' and len(usuario) >= 2:
-            cpf = trocar_de_usuario(cpf, usuario)
-        elif menu == '4' and cpf:
-            print(usuario)
-            conta = trocar_de_conta(usuario, cpf)
-            print(conta)
-            print(type(conta))
-        elif menu == '5':
-            valor = float(input("Valor para depositar: "))
-            deposito(cpf, valor, conta)
-        elif menu == '6':
-            valor = float(input("Valor para sacar"))
-            saque(cpf, valor, conta)
+def menu(usuario, cpf):
+    print(type(usuario))
+    print("\n__________________MENU________________")
+    print("0-Sair\n1-Cadastrar novo usuario")
+    if usuario:
+        print("2-Criar conta corrente")
+    if len(usuario) >= 2:
+        print("3-Trocar de usuario")
+    if usuario.get(cpf) and usuario[cpf].get("conta"):
+        print("4-Trocar de conta\n5-Depositar\n6-Sacar\n7-Extrato")
+    menu = input("Escolha uma opção\n")
+    return menu
             
 def main():
     cpf = None
     conta = None
     usuario = {}
-    menu(usuario, cpf, conta)
+    while True:
+        opcao = menu(usuario, cpf)
+        if opcao == '0':
+            break
+        elif opcao == '1':
+                cpf = cadastrar_usuario(usuario)
+        elif opcao == '2':
+                conta = conta_corrente(cpf, usuario)
+        elif opcao == '3' and len(usuario) >= 2:
+                cpf = trocar_de_usuario(cpf, usuario)
+        elif opcao == '4' and cpf:
+                print(type(usuario))
+                conta = trocar_de_conta(usuario, cpf)
+                print(conta)
+        elif opcao == '5':
+                valor = float(input("Valor para depositar: "))
+                deposito(cpf, valor, conta)
+        elif opcao == '6':
+                valor = float(input("Valor para sacar"))
+                saque(cpf, valor, conta)
 
 main()
